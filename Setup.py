@@ -1,4 +1,3 @@
-import tomli
 import os
 import MafProcessing
 import VariantCalling
