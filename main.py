@@ -1,4 +1,4 @@
-import Setup as b
+import Setup as s
 
 
 # Simply display gap rate and sub rate for all maf processed files.
