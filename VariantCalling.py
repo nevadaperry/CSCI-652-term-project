@@ -93,18 +93,26 @@ def classifyVariants(pwDict : dict):
     genome1Name = pwDict["Genomes"][0]
     genome2Name = pwDict["Genomes"][1]
     for variantDict in pwDict["Variants"]:
-        if(variantDict[f"{genome1Name}-SubSequence"].isalnum()):
-            if(variantDict[f"{genome2Name}-SubSequence"].isalnum()):
-                variantDict["Type"] = "Polymorphism"
-            elif(all(c == '-' for c in variantDict[f"{genome2Name}-SubSequence"])):
+        genome1SubSeq = variantDict[f"{genome1Name}-SubSequence"]
+        genome2SubSeq = variantDict[f"{genome2Name}-SubSequence"]
+        if(genome1SubSeq.isalnum()):
+            if(genome2SubSeq.isalnum()):
+                if(len(genome1SubSeq) == 1):
+                    if(genome1SubSeq + genome2SubSeq in ("AG", "GA", "CT", "TC")):
+                        variantDict["Type"] = "Transition"
+                    else:
+                        variantDict["Type"] = "Transversion"
+                else:
+                    variantDict["Type"] = "MNP"
+            elif(all(c == '-' for c in genome2SubSeq)):
                 variantDict["Type"] = "Deletion"
             else:
-                raise ValueError(f"ERROR: Mixed variant detected!\n{genome1Name}: {variantDict[f'{genome1Name}-SubSequence']}\n{genome2Name}: {variantDict[f'{genome2Name}-SubSequence']}")
-        elif(all(c == '-' for c in variantDict[f"{genome1Name}-SubSequence"])):
-            if(variantDict[f"{genome2Name}-SubSequence"].isalnum()):
+                raise ValueError(f"ERROR: Mixed variant detected!\n{genome1Name}: {genome1SubSeq}\n{genome2Name}: {genome2SubSeq}")
+        elif(all(c == '-' for c in genome1SubSeq)):
+            if(genome2SubSeq.isalnum()):
                 variantDict["Type"] = "Insertion"
             else:
-                raise ValueError(f"ERROR: Invalid insertion type detected! \n{genome1Name}: {variantDict[f'{genome1Name}-SubSequence']}\n{genome2Name}: {variantDict[f'{genome2Name}-SubSequence']}")
+                raise ValueError(f"ERROR: Invalid insertion type detected! \n{genome1Name}: {genome1SubSeq}\n{genome2Name}: {genome2SubSeq}")
 
 
 
