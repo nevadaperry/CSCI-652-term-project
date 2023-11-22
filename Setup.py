@@ -1,6 +1,7 @@
 import tomli
 import os
 import MafProcessing
+import VariantCalling
 
 # region === Pathing Setup ===
 
@@ -46,5 +47,10 @@ for filename in os.listdir(f"{paths.data}\\seqs"):
 for filename in os.listdir(f"{paths.data}\\pw"):
     if(filename.startswith("sars2")):
         data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw\\{filename}")
+
+# Perform variant calling on all pairwise alignments.
+for value in data["pw"].values():
+    VariantCalling.indexPotentialVariants(value)
+    VariantCalling.classifyVariants(value)
 
 #endregion === Data Setup ===

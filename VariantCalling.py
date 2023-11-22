@@ -1,5 +1,3 @@
-import Setup as b
-
 """
 Author: Alex Somheil
 Student ID: Z1888439
@@ -109,7 +107,5 @@ def classifyVariants(pwDict : dict):
                 raise ValueError(f"ERROR: Invalid insertion type detected! \n{genome1Name}: {variantDict[f'{genome1Name}-SubSequence']}\n{genome2Name}: {variantDict[f'{genome2Name}-SubSequence']}")
 
 
-for value in b.data["pw"].values():
-    indexPotentialVariants(value)
-    classifyVariants(value)
+
 

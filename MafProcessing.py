@@ -1,5 +1,3 @@
-import re
-
 """
 Author: Alex Somheil
 Student ID: Z1888439
@@ -11,7 +9,7 @@ also helps to calculate some basic information about the sequences such as gap r
 and more.
 """
 
-
+import re
 
 
 # This method converts a maf file into an organized, parsed dictionary for
