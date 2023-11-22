@@ -30,6 +30,28 @@ paths = Paths()
 data = {"seqs" : {},
         "pw" : {}}
 
+
+# Helper method to read genome structure files that include a unit (genome or subunit) name,
+# start location, and end location.
+# TODO proper pathing to where geneAnnotations files are located in file structure
+def readStructureFile(fileName):
+    units = {}
+    with open(fileName, "r") as _file:
+        for _line in _file:
+            if(_line.strip() != ""):
+                _parts = _line.strip().split()
+                units[_parts[0]] = {"Location" : (int(_parts[1]), int(_parts[2]))}
+    return units
+
+# Store information about genome regions and subregions of the sarsCov2 genome.
+geneAnnotations = readStructureFile(f"{paths.data}\\sarsCov2structure.txt")
+for geneName in geneAnnotations.keys():
+    if(os.path.exists(f"{paths.data}\\{geneName}geneSubUnits.txt")):
+        geneAnnotations[geneName]["SubUnits"] = readStructureFile(f"{paths.data}\\{geneName}geneSubUnits.txt")
+    else:
+        geneAnnotations[geneName]["SubUnits"] = None
+
+
 # Reading all seq files.
 for filename in os.listdir(f"{paths.data}\\seqs"):
     with open(f"{paths.data}\\seqs\\{filename}", "r") as f:
@@ -47,9 +69,14 @@ for filename in os.listdir(f"{paths.data}\\pw"):
     if(filename.startswith("sars2")):
         data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw\\{filename}")
 
+
 # Perform variant calling on all pairwise alignments.
 for value in data["pw"].values():
     VariantCalling.indexPotentialVariants(value)
-    VariantCalling.classifyVariants(value)
+    VariantCalling.classifyVariantTypes(value)
+    VariantCalling.classifyVariantLocations(value, geneAnnotations)
+
+
+
 
 #endregion === Data Setup ===
