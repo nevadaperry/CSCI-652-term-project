@@ -28,8 +28,7 @@ paths = Paths()
 #region === Data Setup ===
 
 data = {"seqs" : {},
-        "pw" : {},
-        "pw-more" : {}}
+        "pw" : {}}
 
 # Reading all seq files.
 for filename in os.listdir(f"{paths.data}\\seqs"):
@@ -45,8 +44,7 @@ for filename in os.listdir(f"{paths.data}\\seqs"):
 
 # Reading all maf files.
 for filename in os.listdir(f"{paths.data}\\pw"):
-    data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw\\{filename}")
-for filename in os.listdir(f"{paths.data}\\pw-more"):
-    data["pw-more"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw-more\\{filename}")
+    if(filename.startswith("sars2")):
+        data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw-more\\{filename}")
 
 #endregion === Data Setup ===
