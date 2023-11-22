@@ -44,7 +44,7 @@ def indexPotentialVariants(pwDict : dict):
             if(genome1_Value == genome2_Value):
                 if(readingVariant):
                     readingVariant = False
-                    foundVariants.append({"Length" : len(runningGenome1SubSequence),
+                    foundVariants.append({"Length" : len(runningGenome1SubSequence), "Genome1" : genome1, "Genome2" : genome2,
                                           f"{genome1}-Location" : (lastStartIndex + genome1_startIndex - runningGenome1GapCount,index + genome1_startIndex - runningGenome1GapCount), f"{genome2}-Location" : (lastStartIndex + genome2_startIndex - runningGenome2GapCount, index + genome2_startIndex - runningGenome2GapCount),
                                           f"{genome1}-SubSequence" : runningGenome1SubSequence,f"{genome2}-SubSequence" : runningGenome2SubSequence})
                     runningGenome1SubSequence = ""
@@ -56,7 +56,7 @@ def indexPotentialVariants(pwDict : dict):
                     # This special case means a polymorphism is right next to a gap, but we still must treat them
                     # separately.
                     if(readingVariant and isGapVariant):
-                        foundVariants.append({"Length": len(runningGenome1SubSequence),
+                        foundVariants.append({"Length": len(runningGenome1SubSequence), "Genome1" : genome1, "Genome2" : genome2,
                                               f"{genome1}-Location": (lastStartIndex + genome1_startIndex - runningGenome1GapCount,index + genome1_startIndex - runningGenome1GapCount),f"{genome2}-Location": (lastStartIndex + genome2_startIndex - runningGenome2GapCount,index + genome2_startIndex - runningGenome2GapCount),
                                               f"{genome1}-SubSequence": runningGenome1SubSequence,f"{genome2}-SubSequence": runningGenome2SubSequence})
                         runningGenome1SubSequence = ""
@@ -67,7 +67,7 @@ def indexPotentialVariants(pwDict : dict):
                     # This special case means a polymorphism is right next to a gap, but we still must treat them
                     # separately.
                     if(readingVariant and not isGapVariant):
-                        foundVariants.append({"Length": len(runningGenome1SubSequence),
+                        foundVariants.append({"Length": len(runningGenome1SubSequence), "Genome1" : genome1, "Genome2" : genome2,
                                               f"{genome1}-Location": (lastStartIndex + genome1_startIndex - runningGenome1GapCount,index + genome1_startIndex - runningGenome1GapCount),f"{genome2}-Location": (lastStartIndex + genome2_startIndex - runningGenome2GapCount,index + genome2_startIndex - runningGenome2GapCount),
                                               f"{genome1}-SubSequence": runningGenome1SubSequence,f"{genome2}-SubSequence": runningGenome2SubSequence})
                         runningGenome1SubSequence = ""
@@ -82,8 +82,9 @@ def indexPotentialVariants(pwDict : dict):
                 runningGenome2SubSequence += genome2_Value
         if (readingVariant):
             foundVariants.append(
-                {f"{genome1}-Location": (lastStartIndex + genome1_startIndex - runningGenome1GapCount, (blockSize - 1) + genome1_startIndex - runningGenome1GapCount),
-                 f"{genome2}-Location": (lastStartIndex + genome2_startIndex - runningGenome2GapCount, (blockSize - 1) + genome2_startIndex - runningGenome2GapCount), })
+                {"Length": len(runningGenome1SubSequence), "Genome1" : genome1, "Genome2" : genome2,
+                 f"{genome1}-Location": (lastStartIndex + genome1_startIndex - runningGenome1GapCount, (blockSize - 1) + genome1_startIndex - runningGenome1GapCount),
+                 f"{genome2}-Location": (lastStartIndex + genome2_startIndex - runningGenome2GapCount, (blockSize - 1) + genome2_startIndex - runningGenome2GapCount)})
 
     pwDict["Variants"] = foundVariants
 
