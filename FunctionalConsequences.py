@@ -15,11 +15,14 @@ def sortVariantsBySize(variantList : list,omitVariantsSmallerThan : int = 0):
     sortedVariants = [item for item in sorted(variantList, key=lambda x: x['Length'], reverse=True) if item['Length'] >= omitVariantsSmallerThan]
     return sortedVariants
 
-def filterVariantsByUnit(variantList: list, unit, subunit=None, unitBlacklist=False, subunitBlackList=False):
+# Given a list of variant dicts, this method returns a similar list filtered only for
+# a specific unit (and option subunit). Optional booleans to set unit/subunit as blacklist instead of
+# whitelist.
+def filterVariantsByUnit(variantList : list, unit : str | list, subunit : str | list = None, unitBlacklist : bool = False, subunitBlackList : bool = False):
     # Convert unit and subunit to lists if they are not already.
-    if not isinstance(unit, list):
+    if(type(unit) is list):
         unit = [unit] if unit is not None else []
-    if not isinstance(subunit, list):
+    if(type(subunit) is list):
         subunit = [subunit] if subunit is not None else []
 
     # Filtering logic for units.
@@ -31,20 +34,21 @@ def filterVariantsByUnit(variantList: list, unit, subunit=None, unitBlacklist=Fa
     # Filtering logic for subunits.
     if subunit:
         if subunitBlackList:
-            sortedVariants = [item for item in filteredVariants if item['SubUnit'] not in subunit]
+            filteredVariants = [item for item in filteredVariants if item['SubUnit'] not in subunit]
         else:
-            sortedVariants = [item for item in filteredVariants if item['SubUnit'] in subunit]
-    else:
-        sortedVariants = filteredVariants
+            filteredVariants = [item for item in filteredVariants if item['SubUnit'] in subunit]
 
-    return sorted(sortedVariants, key=lambda x: x['Gene'], reverse=True)
+    return sorted(filteredVariants, key=lambda x: x['Gene'], reverse=True)
 
-
+# Concatenating all found variants together into one list for ease of use.
 everyVariant = []
 for _pwDictName,_pwDict in s.data["pw"].items():
     everyVariant += _pwDict["Variants"]
 
+# Filtering out variants of size smaller than X
 everyVariant = sortVariantsBySize(variantList = everyVariant,omitVariantsSmallerThan=0)
+
+# Filtering our variant list to only view variants that occur on the Spike gene, and within a specific subunit.
 everyVariant = filterVariantsByUnit(variantList = everyVariant, unit = "S",subunit="Other",subunitBlackList=True)
 
 
