@@ -89,23 +89,64 @@ def indexPotentialVariants(pwDict : dict):
 
 # This method accepts a single processed pairwise alignment dictionary, and attempts to classify what TYPE of variant
 # it is.
-def classifyVariants(pwDict : dict):
+def classifyVariantTypes(pwDict : dict):
     genome1Name = pwDict["Genomes"][0]
     genome2Name = pwDict["Genomes"][1]
+
+    # Identify variant type.
     for variantDict in pwDict["Variants"]:
-        if(variantDict[f"{genome1Name}-SubSequence"].isalnum()):
-            if(variantDict[f"{genome2Name}-SubSequence"].isalnum()):
-                variantDict["Type"] = "Polymorphism"
-            elif(all(c == '-' for c in variantDict[f"{genome2Name}-SubSequence"])):
+        genome1SubSeq = variantDict[f"{genome1Name}-SubSequence"]
+        genome2SubSeq = variantDict[f"{genome2Name}-SubSequence"]
+        if(genome1SubSeq.isalnum()):
+            if(genome2SubSeq.isalnum()):
+                if(len(genome1SubSeq) == 1):
+                    if(genome1SubSeq + genome2SubSeq in ("AG", "GA", "CT", "TC")):
+                        variantDict["Type"] = "Transition"
+                    else:
+                        variantDict["Type"] = "Transversion"
+                else:
+                    variantDict["Type"] = "MNP"
+            elif(all(c == '-' for c in genome2SubSeq)):
                 variantDict["Type"] = "Deletion"
             else:
-                raise ValueError(f"ERROR: Mixed variant detected!\n{genome1Name}: {variantDict[f'{genome1Name}-SubSequence']}\n{genome2Name}: {variantDict[f'{genome2Name}-SubSequence']}")
-        elif(all(c == '-' for c in variantDict[f"{genome1Name}-SubSequence"])):
-            if(variantDict[f"{genome2Name}-SubSequence"].isalnum()):
+                raise ValueError(f"ERROR: Mixed variant detected!\n{genome1Name}: {genome1SubSeq}\n{genome2Name}: {genome2SubSeq}")
+        elif(all(c == '-' for c in genome1SubSeq)):
+            if(genome2SubSeq.isalnum()):
                 variantDict["Type"] = "Insertion"
             else:
-                raise ValueError(f"ERROR: Invalid insertion type detected! \n{genome1Name}: {variantDict[f'{genome1Name}-SubSequence']}\n{genome2Name}: {variantDict[f'{genome2Name}-SubSequence']}")
+                raise ValueError(f"ERROR: Invalid insertion type detected! \n{genome1Name}: {genome1SubSeq}\n{genome2Name}: {genome2SubSeq}")
 
+    # Identify variant location
 
+# This method accepts a single processed pairwise alignment dictionary, and attempts to classify the location
+# it occurs on the SARS-COV2 genome, given a regionDict.
+def classifyVariantLocations(pwDict : dict,regionDict : dict):
+    genome1Name = pwDict["Genomes"][0]
 
+    for variantDict in pwDict["Variants"]:
+        genome1StartLocation = variantDict[f"{genome1Name}-Location"][0]
+
+        # First we find the main gene (if applicable)
+        foundLocation = None
+        for geneName,geneContents in regionDict.items():
+            if(geneContents["Location"][0] < genome1StartLocation < geneContents["Location"][1]):
+                foundLocation = geneName
+                break
+        variantDict["Gene"] = foundLocation if foundLocation is not None else "Other"
+
+        # Now we check if it exists on a subunit of its main gene. Since subunit locations are in reference only
+        # to the genome, we have to account for this.
+        if(variantDict["Gene"] != "Other"):
+            if(regionDict[variantDict["Gene"]]["SubUnits"] is not None):
+                foundLocation = None
+                geneStartOffset = regionDict[variantDict["Gene"]]["Location"][0]
+                for subUnitName,subUnitContents in regionDict[variantDict["Gene"]]["SubUnits"].items():
+                    if((subUnitContents["Location"][0] + geneStartOffset) < genome1StartLocation < (subUnitContents["Location"][1] + geneStartOffset)):
+                        foundLocation = subUnitName
+                        break
+                variantDict["SubUnit"] = foundLocation if foundLocation is not None else "Other"
+            else:
+                variantDict["SubUnit"] = "Other"
+        else:
+            variantDict["SubUnit"] = "Other"
 
