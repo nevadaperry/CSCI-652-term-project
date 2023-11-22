@@ -133,15 +133,15 @@ def classifyVariantLocations(pwDict : dict,regionDict : dict):
             if(geneContents["Location"][0] < genome1StartLocation < geneContents["Location"][1]):
                 foundLocation = geneName
                 break
-        variantDict["Gene"] = foundLocation if foundLocation is not None else "Other"
+        variantDict["Unit"] = foundLocation if foundLocation is not None else "Other"
 
         # Now we check if it exists on a subunit of its main gene. Since subunit locations are in reference only
         # to the genome, we have to account for this.
-        if(variantDict["Gene"] != "Other"):
-            if(regionDict[variantDict["Gene"]]["SubUnits"] is not None):
+        if(variantDict["Unit"] != "Other"):
+            if(regionDict[variantDict["Unit"]]["SubUnits"] is not None):
                 foundLocation = None
-                geneStartOffset = regionDict[variantDict["Gene"]]["Location"][0]
-                for subUnitName,subUnitContents in regionDict[variantDict["Gene"]]["SubUnits"].items():
+                geneStartOffset = regionDict[variantDict["Unit"]]["Location"][0]
+                for subUnitName,subUnitContents in regionDict[variantDict["Unit"]]["SubUnits"].items():
                     if((subUnitContents["Location"][0] + geneStartOffset) < genome1StartLocation < (subUnitContents["Location"][1] + geneStartOffset)):
                         foundLocation = subUnitName
                         break
