@@ -1,5 +1,19 @@
 import re
 
+"""
+Author: Alex Somheil
+Student ID: Z1888439
+Date: 11/16/2023
+
+This file contains various functions for parsing .maf files containing single pairwise alignments
+between two genome alignment sequences into neatly formatted, adaptable Python dictionaries. It
+also helps to calculate some basic information about the sequences such as gap rate, substitution rate,
+and more.
+"""
+
+
+
+
 # This method converts a maf file into an organized, parsed dictionary for
 # use with processing data.
 def readMafFile(mafFilePath):

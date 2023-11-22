@@ -45,6 +45,6 @@ for filename in os.listdir(f"{paths.data}\\seqs"):
 # Reading all maf files.
 for filename in os.listdir(f"{paths.data}\\pw"):
     if(filename.startswith("sars2")):
-        data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw-more\\{filename}")
+        data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw\\{filename}")
 
 #endregion === Data Setup ===
