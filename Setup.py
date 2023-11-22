@@ -2,10 +2,7 @@ import tomli
 import os
 import MafProcessing
 
-# region === Config and Pathing Setup ===
-
-with open("config.toml", "rb") as f:
-    config = tomli.load(f)
+# region === Pathing Setup ===
 
 # Simple class to validate and store program paths.
 class Paths:
@@ -26,7 +23,7 @@ class Paths:
 
 paths = Paths()
 
-# endregion === Config and Pathing Setup ===
+# endregion === Pathing Setup ===
 
 #region === Data Setup ===
 
