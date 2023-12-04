@@ -53,6 +53,13 @@ def filterVariantsByUnit(variantList : list, unit : str | list = None, subunit :
 
     return sorted(filteredVariants, key=lambda x: x['Unit'], reverse=True)
 
+# Given a list of variant dicts, this method returns a similar list filtered for variants that occur between a
+# specific minIndex and maxIndex
+def filterVariantsByLocation(variantList : list, minIndex : int = 0, maxIndex : int = maxVariantSize):
+    sortedVariants = [item for item in sorted(variantList, key=lambda x: x[f"{x['Genome1']}-Location"][0], reverse=True) if minIndex <= item[f"{item['Genome1']}-Location"][0] <= maxIndex]
+    return sortedVariants
+
+
 # Concatenating all found variants together into one list for ease of use.
 variants = []
 for _pwDictName,_pwDict in s.data["pw"].items():
