@@ -90,5 +90,4 @@ all_spikeVariants_alpha = filterVariantsByComparedGenome(variantList=spikeVarian
 all_spikeVariants_beta = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="beta")
 all_spikeVariants_delta = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="delta")
 all_spikeVariants_gamma = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="gamma")
-all_spikeVariants_omicron = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="omicron")
-
+all_spikeVariants_omicronBA1 = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="omicronBA1")
