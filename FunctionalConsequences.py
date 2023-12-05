@@ -95,9 +95,7 @@ all_spikeVariants_gamma = filterVariantsByComparedGenome(variantList=spikeVarian
 all_spikeVariants_iota = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="iota")
 all_spikeVariants_kappa = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="kappa")
 all_spikeVariants_lambda = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="lambda")
-all_spikeVariants_mers = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="mers")
 all_spikeVariants_mu = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="mu")
-all_spikeVariants_oc43 = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="oc43")
 all_spikeVariants_omicron = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="omicron")
 all_spikeVariants_omicronBA1 = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="omicronBA1")
 all_spikeVariants_omicronBA2 = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="omicronBA2")
@@ -107,7 +105,6 @@ all_spikeVariants_omicronBA5 = filterVariantsByComparedGenome(variantList=spikeV
 all_spikeVariants_omicronBQ1 = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="omicronBQ1")
 all_spikeVariants_omicronXAK = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="omicronXAK")
 all_spikeVariants_omicronXBB1 = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="omicronXBB1")
-all_spikeVariants_sars = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="sars")
 all_spikeVariants_theta = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="theta")
 all_spikeVariants_zeta = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="zeta")
 
