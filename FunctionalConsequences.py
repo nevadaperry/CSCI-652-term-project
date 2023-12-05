@@ -59,6 +59,12 @@ def filterVariantsByLocation(variantList : list, minIndex : int = 0, maxIndex : 
     sortedVariants = [item for item in sorted(variantList, key=lambda x: x[f"{x['Genome1']}-Location"][0], reverse=True) if minIndex <= item[f"{item['Genome1']}-Location"][0] <= maxIndex]
     return sortedVariants
 
+# Given a list of variants dicts, this method returns a similar list filtered for variants that occur only for a
+# specific genome2 (compared genome)
+def filterVariantsByComparedGenome(variantList : list, compareGenomeName : str):
+    sortedVariants = [item for item in variantList if item['Genome2'].lower() == compareGenomeName.lower()]
+    return sortedVariants
+
 
 # Concatenating all found variants together into one list for ease of use.
 variants = []
@@ -69,13 +75,20 @@ for _pwDictName,_pwDict in s.data["pw"].items():
 spikeVariants = filterVariantsByUnit(variantList = variants, unit = "S",)
 
 # Creating lists of variants that occur on each specific subUnit of the Spike gene.
-all_spikeVariants_NTD = filterVariantsByUnit(variantList=spikeVariants,subunit="NTD")
-all_spikeVariants_RBD = filterVariantsByUnit(variantList=spikeVariants,subunit="RBD")
-all_spikeVariants_Cleavage = filterVariantsByUnit(variantList=spikeVariants,subunit="Cleavage")
-all_spikeVariants_FP = filterVariantsByUnit(variantList=spikeVariants,subunit="FP")
-all_spikeVariants_IFP = filterVariantsByUnit(variantList=spikeVariants,subunit="IFP")
-all_spikeVariants_HR1 = filterVariantsByUnit(variantList=spikeVariants,subunit="HR1")
-all_spikeVariants_HR2 = filterVariantsByUnit(variantList=spikeVariants,subunit="HR2")
-all_spikeVariants_TM = filterVariantsByUnit(variantList=spikeVariants,subunit="TM")
-all_spikeVariants_CT = filterVariantsByUnit(variantList=spikeVariants,subunit="CT")
-all_spikeVariants_Other = filterVariantsByUnit(variantList=spikeVariants,subunit="Other")
+sub_spikeVariants_NTD = filterVariantsByUnit(variantList=spikeVariants,subunit="NTD")
+sub_spikeVariants_RBD = filterVariantsByUnit(variantList=spikeVariants,subunit="RBD")
+sub_spikeVariants_Cleavage = filterVariantsByUnit(variantList=spikeVariants,subunit="Cleavage")
+sub_spikeVariants_FP = filterVariantsByUnit(variantList=spikeVariants,subunit="FP")
+sub_spikeVariants_IFP = filterVariantsByUnit(variantList=spikeVariants,subunit="IFP")
+sub_spikeVariants_HR1 = filterVariantsByUnit(variantList=spikeVariants,subunit="HR1")
+sub_spikeVariants_HR2 = filterVariantsByUnit(variantList=spikeVariants,subunit="HR2")
+sub_spikeVariants_TM = filterVariantsByUnit(variantList=spikeVariants,subunit="TM")
+sub_spikeVariants_CT = filterVariantsByUnit(variantList=spikeVariants,subunit="CT")
+sub_spikeVariants_Other = filterVariantsByUnit(variantList=spikeVariants,subunit="Other")
+
+all_spikeVariants_alpha = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="alpha")
+all_spikeVariants_beta = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="beta")
+all_spikeVariants_delta = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="delta")
+all_spikeVariants_gamma = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="gamma")
+all_spikeVariants_omicron = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="omicron")
+
