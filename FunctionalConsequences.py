@@ -7,88 +7,133 @@ This file contains functions used to help visualize some of the higher level fun
 consequences resulted from comparing SARS-COV2 to its variants.
 """
 import Setup as s
-maxVariantSize = 10**100
+maxMutationSize = 10**100
 
-# Given a list of variant dicts, this method returns a similar list ordered
-# by size. Optional parameter to omit variants smaller than a certain size.
-def filterVariantsBySize(variantList : list,minVariantSize : int = 0,maxVariantSize : int = maxVariantSize):
-    sortedVariants = [item for item in sorted(variantList, key=lambda x: x['Length'], reverse=True) if minVariantSize <= item['Length'] <= maxVariantSize]
-    return sortedVariants
+data = s.data
+transmissibility = s.transmissibility
 
-# Given a list of variant dicts, this method returns a similar list filtered only for
+# Given a list of mutation dicts, this method returns a similar list ordered
+# by size. Optional parameter to omit mutations smaller than a certain size.
+def filterMutationsBySize(mutationList : list,minSize : int = 0,maxSize : int = maxMutationSize):
+    sortedMutations = [item for item in sorted(mutationList, key=lambda x: x['Length'], reverse=True) if minSize <= item['Length'] <= maxSize]
+    return sortedMutations
+
+# Given a list of mutation dicts, this method returns a similar list filtered only for
 # a specific unit (and option subunit). Optional booleans to set unit/subunit as blacklist instead of
 # whitelist.
-def filterVariantsByUnit(variantList : list, unit : str | list = None, subunit : str | list = None, unitBlackList : bool = False, subunitBlackList : bool = False):
+def filterMutationsByUnit(mutationList : list, unit : str | list = None, subunit : str | list = None, unitBlackList : bool = False, subunitBlackList : bool = False):
     # Convert unit and subunit to lists if they are not already.
     if(type(unit) is not list):
         unit = [unit] if unit is not None else []
     if(type(subunit) is not list):
         subunit = [subunit] if subunit is not None else []
 
-    filteredVariants = variantList
+    filteredMutations = mutationList
     # Filtering logic for units.
     if(unit):
         newFilteredList = []
-        for variant in filteredVariants:
+        for mutation in filteredMutations:
             for thisUnitFilter in unit:
-                if(thisUnitFilter == variant["Unit"]):
+                if(thisUnitFilter == mutation["Unit"]):
                     if(unitBlackList):
                         continue
                     else:
-                        newFilteredList.append(variant)
-        filteredVariants = newFilteredList
+                        newFilteredList.append(mutation)
+        filteredMutations = newFilteredList
 
     # Filtering logic for subunits.
     if(subunit):
         newFilteredList = []
-        for variant in filteredVariants:
+        for mutation in filteredMutations:
             for thisSubunitFilter in subunit:
-                if(thisSubunitFilter == variant["SubUnit"]):
+                if(thisSubunitFilter == mutation["SubUnit"]):
                     if(subunitBlackList):
                         break
                     else:
-                        newFilteredList.append(variant)
+                        newFilteredList.append(mutation)
                         break
-        filteredVariants = newFilteredList
+        filteredMutations = newFilteredList
 
-    return sorted(filteredVariants, key=lambda x: x['Unit'], reverse=True)
+    return sorted(filteredMutations, key=lambda x: x['Unit'], reverse=True)
 
-# Given a list of variant dicts, this method returns a similar list filtered for variants that occur between a
+# Given a list of mutation dicts, this method returns a similar list filtered for mutations that occur between a
 # specific minIndex and maxIndex
-def filterVariantsByLocation(variantList : list, minIndex : int = 0, maxIndex : int = maxVariantSize):
-    sortedVariants = [item for item in sorted(variantList, key=lambda x: x[f"{x['Genome1']}-Location"][0], reverse=True) if minIndex <= item[f"{item['Genome1']}-Location"][0] <= maxIndex]
-    return sortedVariants
+def filterMutationsByLocation(mutationList : list, minIndex : int = 0, maxIndex : int = maxMutationSize):
+    sortedMutations = [item for item in sorted(mutationList, key=lambda x: x[f"{x['Genome1']}-Location"][0], reverse=True) if minIndex <= item[f"{item['Genome1']}-Location"][0] <= maxIndex]
+    return sortedMutations
 
-# Given a list of variants dicts, this method returns a similar list filtered for variants that occur only for a
+# Given a list of mutation dicts, this method returns a similar list filtered for mutations that occur only for a
 # specific genome2 (compared genome)
-def filterVariantsByComparedGenome(variantList : list, compareGenomeName : str):
-    sortedVariants = [item for item in variantList if item['Genome2'].lower() == compareGenomeName.lower()]
-    return sortedVariants
+def filterMutationsByComparedGenome(mutationList : list, compareGenomeName : str):
+    sortedMutations = [item for item in mutationList if item['Genome2'].lower() == compareGenomeName.lower()]
+    return sortedMutations
+
+# Given a list of mutation dicts, this method returns a similar list filtered for mutations of a certain type of indel
+# (insertion, deletion, transversion, etc.)
+def filterMutationsByType(mutationList : list, mutationType : str | list):
+    if(type(mutationType) is str):
+        mutationType = [mutationType]
+    sortedMutations = [item for item in mutationList if item['Type'] in mutationType]
+    return sortedMutations
 
 
-# Concatenating all found variants together into one list for ease of use.
-variants = []
+# Concatenating all found mutations together into one list for ease of use.
+mutations = []
 for _pwDictName,_pwDict in s.data["pw"].items():
-    variants += _pwDict["Variants"]
+    mutations += _pwDict["Mutations"]
 
-# Filtering our variant list to only view variants that occur on the Spike gene, and within a specific subunit.
-spikeVariants = filterVariantsByUnit(variantList = variants, unit = "S",)
 
-# Creating lists of variants that occur on each specific subUnit of the Spike gene.
-sub_spikeVariants_NTD = filterVariantsByUnit(variantList=spikeVariants,subunit="NTD")
-sub_spikeVariants_RBD = filterVariantsByUnit(variantList=spikeVariants,subunit="RBD")
-sub_spikeVariants_Cleavage = filterVariantsByUnit(variantList=spikeVariants,subunit="Cleavage")
-sub_spikeVariants_FP = filterVariantsByUnit(variantList=spikeVariants,subunit="FP")
-sub_spikeVariants_IFP = filterVariantsByUnit(variantList=spikeVariants,subunit="IFP")
-sub_spikeVariants_HR1 = filterVariantsByUnit(variantList=spikeVariants,subunit="HR1")
-sub_spikeVariants_HR2 = filterVariantsByUnit(variantList=spikeVariants,subunit="HR2")
-sub_spikeVariants_TM = filterVariantsByUnit(variantList=spikeVariants,subunit="TM")
-sub_spikeVariants_CT = filterVariantsByUnit(variantList=spikeVariants,subunit="CT")
-sub_spikeVariants_Other = filterVariantsByUnit(variantList=spikeVariants,subunit="Other")
 
-all_spikeVariants_alpha = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="alpha")
-all_spikeVariants_beta = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="beta")
-all_spikeVariants_delta = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="delta")
-all_spikeVariants_gamma = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="gamma")
-all_spikeVariants_omicron = filterVariantsByComparedGenome(variantList=spikeVariants,compareGenomeName="omicron")
+# Filtering our mutation list to only view mutations that occur on the Spike gene, and within a specific subunit.
+spikeMutations = filterMutationsByUnit(mutationList = mutations, unit = "S",)
 
+# Creating lists of mutations that occur on each specific subUnit of the Spike gene.
+sub_spikeMutations_NTD = filterMutationsByUnit(mutationList=spikeMutations,subunit="NTD")
+sub_spikeMutations_RBD = filterMutationsByUnit(mutationList=spikeMutations,subunit="RBD")
+sub_spikeMutations_Cleavage = filterMutationsByUnit(mutationList=spikeMutations,subunit="Cleavage")
+sub_spikeMutations_FP = filterMutationsByUnit(mutationList=spikeMutations,subunit="FP")
+sub_spikeMutations_IFP = filterMutationsByUnit(mutationList=spikeMutations,subunit="IFP")
+sub_spikeMutations_HR1 = filterMutationsByUnit(mutationList=spikeMutations,subunit="HR1")
+sub_spikeMutations_HR2 = filterMutationsByUnit(mutationList=spikeMutations,subunit="HR2")
+sub_spikeMutations_TM = filterMutationsByUnit(mutationList=spikeMutations,subunit="TM")
+sub_spikeMutations_CT = filterMutationsByUnit(mutationList=spikeMutations,subunit="CT")
+sub_spikeMutations_Other = filterMutationsByUnit(mutationList=spikeMutations,subunit="Other")
+
+all_mutations_alpha = filterMutationsByComparedGenome(mutationList=mutations,compareGenomeName="alpha")
+all_mutations_beta = filterMutationsByComparedGenome(mutationList=mutations,compareGenomeName="beta")
+all_mutations_delta = filterMutationsByComparedGenome(mutationList=mutations,compareGenomeName="delta")
+all_mutations_gamma = filterMutationsByComparedGenome(mutationList=mutations,compareGenomeName="gamma")
+all_mutations_omicronBA1 = filterMutationsByComparedGenome(mutationList=mutations,compareGenomeName="omicronBA1")
+
+all_spikeMutations_alpha = filterMutationsByComparedGenome(mutationList=spikeMutations,compareGenomeName="alpha")
+all_spikeMutations_beta = filterMutationsByComparedGenome(mutationList=spikeMutations,compareGenomeName="beta")
+all_spikeMutations_delta = filterMutationsByComparedGenome(mutationList=spikeMutations,compareGenomeName="delta")
+all_spikeMutations_gamma = filterMutationsByComparedGenome(mutationList=spikeMutations,compareGenomeName="gamma")
+all_spikeMutations_omicronBA1 = filterMutationsByComparedGenome(mutationList=spikeMutations,compareGenomeName="omicronBA1")
+
+'''
+all_spikeInsertions_alpha = filterMutationsByType(mutationList=all_spikeMutations_alpha,mutationType="Insertion")
+all_spikeDeletions_alpha = filterMutationsByType(mutationList=all_spikeMutations_alpha,mutationType="Deletion")
+all_spikeSNPs_alpha = filterMutationsByType(mutationList=all_spikeMutations_alpha,mutationType=["Transversion","Transition"])
+all_spikeMNPs_alpha = filterMutationsByType(mutationList=all_spikeMutations_alpha,mutationType="MNP")
+
+all_spikeInsertions_beta = filterMutationsByType(mutationList=all_spikeMutations_beta, mutationType="Insertion")
+all_spikeDeletions_beta = filterMutationsByType(mutationList=all_spikeMutations_beta, mutationType="Deletion")
+all_spikeSNPs_beta = filterMutationsByType(mutationList=all_spikeMutations_beta, mutationType=["Transversion", "Transition"])
+all_spikeMNPs_beta = filterMutationsByType(mutationList=all_spikeMutations_beta, mutationType="MNP")
+
+all_spikeInsertions_delta = filterMutationsByType(mutationList=all_spikeMutations_delta, mutationType="Insertion")
+all_spikeDeletions_delta = filterMutationsByType(mutationList=all_spikeMutations_delta, mutationType="Deletion")
+all_spikeSNPs_delta = filterMutationsByType(mutationList=all_spikeMutations_delta, mutationType=["Transversion", "Transition"])
+all_spikeMNPs_delta = filterMutationsByType(mutationList=all_spikeMutations_delta, mutationType="MNP")
+
+all_spikeInsertions_gamma = filterMutationsByType(mutationList=all_spikeMutations_gamma, mutationType="Insertion")
+all_spikeDeletions_gamma = filterMutationsByType(mutationList=all_spikeMutations_gamma, mutationType="Deletion")
+all_spikeSNPs_gamma = filterMutationsByType(mutationList=all_spikeMutations_gamma, mutationType=["Transversion", "Transition"])
+all_spikeMNPs_gamma = filterMutationsByType(mutationList=all_spikeMutations_gamma, mutationType="MNP")
+
+all_spikeInsertions_omicronBA1 = filterMutationsByType(mutationList=all_spikeMutations_omicronBA1, mutationType="Insertion")
+all_spikeDeletions_omicronBA1 = filterMutationsByType(mutationList=all_spikeMutations_omicronBA1, mutationType="Deletion")
+all_spikeSNPs_omicronBA1 = filterMutationsByType(mutationList=all_spikeMutations_omicronBA1, mutationType=["Transversion", "Transition"])
+all_spikeMNPs_omicronBA1 = filterMutationsByType(mutationList=all_spikeMutations_omicronBA1, mutationType="MNP")
+'''

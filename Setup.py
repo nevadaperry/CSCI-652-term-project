@@ -51,7 +51,6 @@ for geneName in geneAnnotations.keys():
     else:
         geneAnnotations[geneName]["SubUnits"] = None
 
-
 # Reading all seq files.
 for filename in os.listdir(f"{paths.data}\\seqs"):
     with open(f"{paths.data}\\seqs\\{filename}", "r") as f:
@@ -70,11 +69,64 @@ for filename in os.listdir(f"{paths.data}\\pw"):
         data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw\\{filename}")
 
 
+# Reading all transmissibility files.
+transmissibility = {}
+def parseTransmissibilityTable(table):
+    # Split the table into lines
+    lines = table.strip().split('\n')
+
+    # Initialize an empty dictionary to store the data
+    tableDict = {}
+
+    # Iterate over each line in the table
+    for _line in lines:
+        # Split each line into its components
+        parts = _line.split()
+        country = parts[0]
+        r_value = float(parts[1])
+        ci_lower = float(parts[2])
+        ci_upper = float(parts[3])
+        r_squared = float(parts[4])
+        growth_rate = float(parts[5])
+        growth_rate_ci_lower = float(parts[6])
+        growth_rate_ci_upper = float(parts[7])
+
+        # Add the data to the dictionary
+        tableDict[country] = {
+            'R': r_value,
+            'CI Lower': ci_lower,
+            'CI Upper': ci_upper,
+            'R Squared': r_squared,
+            'Growth Rate': growth_rate,
+            'Growth Rate CI Lower': growth_rate_ci_lower,
+            'Growth Rate CI Upper': growth_rate_ci_upper
+        }
+    return tableDict
+for filename in os.listdir(f"{paths.data}\\transmissibility"):
+    genomeName = filename.split("_")[0]
+    transmissibility[genomeName] = {}
+
+    with open(f"{paths.data}\\transmissibility\\{filename}", "r") as f:
+        parsedTable = parseTransmissibilityTable(f.read())
+    transmissibility[genomeName]["Raw"] = parsedTable
+# Further summarizing transmissibility data.
+for genome,tmisDict in transmissibility.items():
+
+    totalR = 0.0
+    totalGrowthRate = 0.0
+    for values in tmisDict["Raw"].values():
+        totalR += values["R"]
+        totalGrowthRate += values["Growth Rate"]
+
+    tmisDict["AvgR"] = round(totalR / len(tmisDict["Raw"]),4)
+    tmisDict["AvgGrowthRate"] = round(totalGrowthRate / len(tmisDict["Raw"]),4)
+
+
 # Perform variant calling on all pairwise alignments.
 for value in data["pw"].values():
-    VariantCalling.indexPotentialVariants(value)
-    VariantCalling.classifyVariantTypes(value)
-    VariantCalling.classifyVariantLocations(value, geneAnnotations)
+    VariantCalling.indexPotentialMutations(value)
+    VariantCalling.classifyMutationTypes(value)
+    VariantCalling.classifyMutationLocations(value, geneAnnotations)
 
 
 
