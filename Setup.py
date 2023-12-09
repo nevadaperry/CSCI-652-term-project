@@ -52,15 +52,15 @@ for geneName in geneAnnotations.keys():
 
 # Reading all maf files. useExtendedData option for parsing ALL sars-cov2 pw-alignments, instead of just the
 # 5 chosen Variants of Concern.
-useExtendedData = False
+useExtendedData = True
 if(useExtendedData):
-    for filename in os.listdir(f"{paths.data}\\pw-voc"):
-        if(filename.startswith("sars2")):
-            data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw\\{filename}")
-else:
     for filename in os.listdir(f"{paths.data}\\pw-extended"):
         if(filename.startswith("sars2")):
-            data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw\\{filename}")
+            data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw-extended\\{filename}")
+else:
+    for filename in os.listdir(f"{paths.data}\\pw-voc"):
+        if(filename.startswith("sars2")):
+            data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw-voc\\{filename}")
 
 
 # Reading all transmissibility files.

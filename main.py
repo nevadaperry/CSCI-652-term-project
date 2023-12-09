@@ -167,3 +167,5 @@ def indelTypesByVariant(variantName):
 
 # The above functions were run as needed to generate graphs applicable to the functional consequences and variant
 # calling sections.
+
+spikeMutationsFrequencyByVariant()
