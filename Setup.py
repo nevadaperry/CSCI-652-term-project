@@ -137,7 +137,7 @@ for value in data["pw"].values():
 #endregion === Data Setup ===
 
 # Optional section used to print calculated Gap Rate and Substitution Rate.
-printGapSubRateData = True
+printGapSubRateData = False
 if(printGapSubRateData):
 
     print("==== GAP RATES ====\n")
