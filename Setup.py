@@ -1,3 +1,12 @@
+"""
+Author: Alex Somheil
+Student ID: Z1888439
+Date: 11/18/2023
+
+This file contains various functions for facilitating setup of all calculated data. It
+also provides a method to print out the gap rate and substitution rate of found data.
+"""
+
 import os
 import MafProcessing
 import VariantCalling
@@ -128,7 +137,7 @@ for value in data["pw"].values():
 #endregion === Data Setup ===
 
 # Optional section used to print calculated Gap Rate and Substitution Rate.
-printGapSubRateData = True
+printGapSubRateData = False
 if(printGapSubRateData):
 
     print("==== GAP RATES ====\n")
