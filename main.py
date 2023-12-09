@@ -165,5 +165,5 @@ def indelTypesByVariant(variantName):
 
     plt.show()
 
-indelTypesByVariant("delta")
-indelTypesByVariant("omicronBA1")
+# The above functions were run as needed to generate graphs applicable to the functional consequences and variant
+# calling sections.

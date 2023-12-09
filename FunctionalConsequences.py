@@ -9,8 +9,11 @@ consequences resulted from comparing SARS-COV2 to its variants.
 import Setup as s
 maxMutationSize = 10**100
 
+# Copying over data variable names for ease of use.
 data = s.data
 transmissibility = s.transmissibility
+
+
 
 # Given a list of mutation dicts, this method returns a similar list ordered
 # by size. Optional parameter to omit mutations smaller than a certain size.
@@ -110,30 +113,3 @@ all_spikeMutations_beta = filterMutationsByComparedGenome(mutationList=spikeMuta
 all_spikeMutations_delta = filterMutationsByComparedGenome(mutationList=spikeMutations,compareGenomeName="delta")
 all_spikeMutations_gamma = filterMutationsByComparedGenome(mutationList=spikeMutations,compareGenomeName="gamma")
 all_spikeMutations_omicronBA1 = filterMutationsByComparedGenome(mutationList=spikeMutations,compareGenomeName="omicronBA1")
-
-'''
-all_spikeInsertions_alpha = filterMutationsByType(mutationList=all_spikeMutations_alpha,mutationType="Insertion")
-all_spikeDeletions_alpha = filterMutationsByType(mutationList=all_spikeMutations_alpha,mutationType="Deletion")
-all_spikeSNPs_alpha = filterMutationsByType(mutationList=all_spikeMutations_alpha,mutationType=["Transversion","Transition"])
-all_spikeMNPs_alpha = filterMutationsByType(mutationList=all_spikeMutations_alpha,mutationType="MNP")
-
-all_spikeInsertions_beta = filterMutationsByType(mutationList=all_spikeMutations_beta, mutationType="Insertion")
-all_spikeDeletions_beta = filterMutationsByType(mutationList=all_spikeMutations_beta, mutationType="Deletion")
-all_spikeSNPs_beta = filterMutationsByType(mutationList=all_spikeMutations_beta, mutationType=["Transversion", "Transition"])
-all_spikeMNPs_beta = filterMutationsByType(mutationList=all_spikeMutations_beta, mutationType="MNP")
-
-all_spikeInsertions_delta = filterMutationsByType(mutationList=all_spikeMutations_delta, mutationType="Insertion")
-all_spikeDeletions_delta = filterMutationsByType(mutationList=all_spikeMutations_delta, mutationType="Deletion")
-all_spikeSNPs_delta = filterMutationsByType(mutationList=all_spikeMutations_delta, mutationType=["Transversion", "Transition"])
-all_spikeMNPs_delta = filterMutationsByType(mutationList=all_spikeMutations_delta, mutationType="MNP")
-
-all_spikeInsertions_gamma = filterMutationsByType(mutationList=all_spikeMutations_gamma, mutationType="Insertion")
-all_spikeDeletions_gamma = filterMutationsByType(mutationList=all_spikeMutations_gamma, mutationType="Deletion")
-all_spikeSNPs_gamma = filterMutationsByType(mutationList=all_spikeMutations_gamma, mutationType=["Transversion", "Transition"])
-all_spikeMNPs_gamma = filterMutationsByType(mutationList=all_spikeMutations_gamma, mutationType="MNP")
-
-all_spikeInsertions_omicronBA1 = filterMutationsByType(mutationList=all_spikeMutations_omicronBA1, mutationType="Insertion")
-all_spikeDeletions_omicronBA1 = filterMutationsByType(mutationList=all_spikeMutations_omicronBA1, mutationType="Deletion")
-all_spikeSNPs_omicronBA1 = filterMutationsByType(mutationList=all_spikeMutations_omicronBA1, mutationType=["Transversion", "Transition"])
-all_spikeMNPs_omicronBA1 = filterMutationsByType(mutationList=all_spikeMutations_omicronBA1, mutationType="MNP")
-'''

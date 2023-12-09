@@ -168,7 +168,7 @@ def calculateTotalValues(mafFileDict : dict):
 
     return returnDict
 
-# This method processed a full maf file, converting it from a raw file into a mafDataDict and returning
+# This helper method processes a full maf file, converting it from a raw file into a mafDataDict and returning
 # the totalValues result dict.
 def processFullMafFile(mafFilePath):
     # Read and process maf data into dictionary

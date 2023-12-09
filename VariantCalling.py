@@ -117,7 +117,6 @@ def classifyMutationTypes(pwDict : dict):
             else:
                 raise ValueError(f"ERROR: Invalid insertion type detected! \n{genome1Name}: {genome1SubSeq}\n{genome2Name}: {genome2SubSeq}")
 
-
 # This method accepts a single processed pairwise alignment dictionary, and attempts to classify the location
 # it occurs on the SARS-COV2 genome, given a regionDict.
 def classifyMutationLocations(pwDict : dict,regionDict : dict):

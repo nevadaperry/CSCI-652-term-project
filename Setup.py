@@ -27,8 +27,7 @@ paths = Paths()
 
 #region === Data Setup ===
 
-data = {"seqs" : {},
-        "pw" : {}}
+data = {"pw" : {}}
 
 
 # Helper method to read genome structure files that include a unit (genome or subunit) name,
@@ -50,18 +49,6 @@ for geneName in geneAnnotations.keys():
         geneAnnotations[geneName]["SubUnits"] = readStructureFile(f"{paths.data}\\{geneName}geneSubUnits.txt")
     else:
         geneAnnotations[geneName]["SubUnits"] = None
-
-# Reading all seq files.
-for filename in os.listdir(f"{paths.data}\\seqs"):
-    with open(f"{paths.data}\\seqs\\{filename}", "r") as f:
-        seq = ""
-        for line in f:
-            if(line.startswith(">")):
-                # Skip header/comment lines
-                continue
-            else:
-                seq += line.strip()
-        data["seqs"][filename] = seq
 
 # Reading all maf files.
 for filename in os.listdir(f"{paths.data}\\pw"):
