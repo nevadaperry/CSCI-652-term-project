@@ -50,10 +50,17 @@ for geneName in geneAnnotations.keys():
     else:
         geneAnnotations[geneName]["SubUnits"] = None
 
-# Reading all maf files.
-for filename in os.listdir(f"{paths.data}\\pw"):
-    if(filename.startswith("sars2")):
-        data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw\\{filename}")
+# Reading all maf files. useExtendedData option for parsing ALL sars-cov2 pw-alignments, instead of just the
+# 5 chosen Variants of Concern.
+useExtendedData = True
+if(useExtendedData):
+    for filename in os.listdir(f"{paths.data}\\pw-extended"):
+        if(filename.startswith("sars2")):
+            data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw-extended\\{filename}")
+else:
+    for filename in os.listdir(f"{paths.data}\\pw-voc"):
+        if(filename.startswith("sars2")):
+            data["pw"][filename.split(".sing.maf")[0]] = MafProcessing.processFullMafFile(f"{paths.data}\\pw-voc\\{filename}")
 
 
 # Reading all transmissibility files.
@@ -119,3 +126,15 @@ for value in data["pw"].values():
 
 
 #endregion === Data Setup ===
+
+# Optional section used to print calculated Gap Rate and Substitution Rate.
+printGapSubRateData = True
+if(printGapSubRateData):
+
+    print("==== GAP RATES ====\n")
+    for key,value in data["pw"].items():
+        print(f"{key}: {value['GapRate']}")
+
+    print("\n==== SUBSTITUTION RATES ====\n")
+    for key, value in data["pw"].items():
+        print(f"{key}: {value['SubstitutionRate']}")
