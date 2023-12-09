@@ -99,6 +99,12 @@ sub_spikeMutations_TM = filterMutationsByUnit(mutationList=spikeMutations,subuni
 sub_spikeMutations_CT = filterMutationsByUnit(mutationList=spikeMutations,subunit="CT")
 sub_spikeMutations_Other = filterMutationsByUnit(mutationList=spikeMutations,subunit="Other")
 
+all_mutations_alpha = filterMutationsByComparedGenome(mutationList=mutations,compareGenomeName="alpha")
+all_mutations_beta = filterMutationsByComparedGenome(mutationList=mutations,compareGenomeName="beta")
+all_mutations_delta = filterMutationsByComparedGenome(mutationList=mutations,compareGenomeName="delta")
+all_mutations_gamma = filterMutationsByComparedGenome(mutationList=mutations,compareGenomeName="gamma")
+all_mutations_omicronBA1 = filterMutationsByComparedGenome(mutationList=mutations,compareGenomeName="omicronBA1")
+
 all_spikeMutations_alpha = filterMutationsByComparedGenome(mutationList=spikeMutations,compareGenomeName="alpha")
 all_spikeMutations_beta = filterMutationsByComparedGenome(mutationList=spikeMutations,compareGenomeName="beta")
 all_spikeMutations_delta = filterMutationsByComparedGenome(mutationList=spikeMutations,compareGenomeName="delta")
